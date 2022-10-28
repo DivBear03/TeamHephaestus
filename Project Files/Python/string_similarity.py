@@ -61,3 +61,4 @@ while (not end):
     # Interpret the catalog selection
     # Remove the first command word
     speech = speech.replace(speech.split()[0], "")
+    print(matchHardware(speech))
