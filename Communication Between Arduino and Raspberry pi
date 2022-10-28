@@ -1,0 +1,8 @@
+https://roboticsbackend.com/raspberry-pi-arduino-serial-communication/
+
+Hard wire the arduino and raspberry pi boards together
+Run ls/dev/tty* to find what the arduino is called
+Pip install pyserial
+Import serial
+Initialize your serial communication
+Make sure to convert from bytes to regular string
