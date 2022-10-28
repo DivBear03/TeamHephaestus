@@ -6,7 +6,9 @@ Servo servoArray[arraySize];
 
 void setup() {
 
+  Serial.begin(9600);
   attachServos();
+  resetServos();
 
 }
 
@@ -58,14 +60,26 @@ int findBinNum(String recievedWord) {
   
 }
 
+void resetServos() {
+
+  for (int i = 0; i < arraySize; i++) {
+    servoArray[i].writeMicroseconds(0);
+  }
+  
+}
+
 void openBin(int binNum) {
 
-  for (int pos = 0; pos < 180; pos++) {
-    servoArray[binNum].write(pos);
-  }
-
-  for (int pos = 180; pos > 0; pos--) {
-    servoArray[binNum].write(pos);
-  }
+  Serial.println("Opening");
+  servoArray[binNum].writeMicroseconds(2500);
+  delay(2000);
+  servoArray[binNum].writeMicroseconds(0);
+//  for (int pos = 0; pos < 180; pos++) {
+//    servoArray[binNum].writeMicroseconds(pos);
+//  }
+//  Serial.println("Closing");
+//  for (int pos = 180; pos > 0; pos--) {
+//    servoArray[binNum].write(pos);
+//  }
   
 }
