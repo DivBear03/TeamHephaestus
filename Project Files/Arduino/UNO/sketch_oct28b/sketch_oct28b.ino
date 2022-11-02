@@ -21,9 +21,9 @@ void setup()
   // Note: training can only be performed in setup(). 
   // The training functions are "lazy" and only do something if there are changes. 
   // They can be commented out to save memory and startup time once training has been performed.
-  recognizer.callSign("Cat"); // Train callsign Arduino (may take 20 seconds)
-  recognizer.addSentence("on"); // Add sentence 1
-  recognizer.addSentence("off");            // Add sentence 2
+  recognizer.callSign("Oliver"); // Train callsign Arduino (may take 20 seconds)
+  recognizer.addSentence("Turn on"); // Add sentence 1
+  recognizer.addSentence("Turn off");            // Add sentence 2
   recognizer.train();                           // Train (may take 20seconds) 
   //*/
 
