@@ -2,8 +2,7 @@ import textdistance as td
 import speech_recognition as sr
 import serial
 import numpy
-import textdistance
-
+# from smbus2 import SMBus
 # global variable declarations
 global r, mic, hardware, commands, audio
 r = sr.Recognizer()
@@ -43,7 +42,7 @@ def sim(s1:str,s2:str) -> float:
     token1 = s1.split(" ")
     token2 = s2.split(" ")
 
-    return textdistance.jaccard(token1,token2)
+    return td.jaccard(token1,token2)
 
 def matchHardware(speech) -> int:
     global hardware
