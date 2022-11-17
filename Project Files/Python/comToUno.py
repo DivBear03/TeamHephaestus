@@ -1,7 +1,7 @@
 import serial
 import pyaudio
 import speech_recognition as sr
-import textdistance as td
+from textdistance import ratcliff_obershelp as rat_ober
 # import numpy
 
 r = sr.Recognizer()
@@ -29,7 +29,6 @@ hardware = {
     "M16 bolt":11, "M16 nut":12,
     "M20 bolt":13, "M20 nut":14,
     "M24 bolt":15, "M24 nut":16,
-    "M30 bolt":17, "M30 nut":18
 }
 
 commands = ["dispense", "return"]
@@ -50,8 +49,8 @@ def matchHardware(gtext) -> int:
         print("Sent &M-1|")
         writeSerial("&M-1|")  # Invalid hardware
     else:
-        print("Sent &M" + str(hardware[bestMatch] + "|"))
-        writeSerial("&M" + str(hardware[bestMatch] + "|"))    # match found
+        print("Sent &M" + str(hardware[bestMatch]) + "|")
+        writeSerial("&M" + str(hardware[bestMatch]) + "|")   # match found
 
 def sim(s1:str,s2:str) -> float:  
     # remove all spaces and dashes  
@@ -69,7 +68,7 @@ def sim(s1:str,s2:str) -> float:
     token1 = s1.split(" ")
     token2 = s2.split(" ")
 
-    return td.jaccard(token1,token2)
+    return rat_ober(s1,s2)
 
 def writeSerial(input: str):
     serial_port.write((input+"\r\n").encode('utf-8'))
@@ -78,7 +77,7 @@ def Record():
     # record audio through microphone
     print("Recording")
     with mic as source:
-        r.adjust_for_ambient_noise(source)
+        # r.adjust_for_ambient_noise(source)
         print("listening now")
         audio = r.listen(source)
     print("analyzing")
@@ -86,7 +85,7 @@ def Record():
     # send to google API
     gtext = r.recognize_google(audio)
     print("Google Result:", gtext)
-
+    
     # compare first word of resulting string to command list
     firstWord = gtext.split()[0]
     print(firstWord)
@@ -101,8 +100,9 @@ def main():
     print("Listening on serial")
     while (True):
         line = str(serial_port.readline())
-        if (line.__contains__("P")):
-            print(line)
+        print(line)
+        if (line.__contains__("&P") and line.__contains__("|")):
+            # print(line)
             command = int(line[line.index("P")+1])
             print("Command:", command)
             if command == 1:
