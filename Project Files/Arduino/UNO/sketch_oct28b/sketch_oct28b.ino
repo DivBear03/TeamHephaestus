@@ -173,7 +173,7 @@ void setup()
       }else if (res == 2) {
         recognizer.say("Incorrect");
       } else {
-        float angle = (res - 3) * 22.5;
+        float angle = (res - 3) * 45;
         recognizer.say("moving motor to");
         Serial.print("Motor position: ");
         Serial.println(angle);
