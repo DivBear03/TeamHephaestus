@@ -1,0 +1,200 @@
+//void loop3() {
+//    signed int res = recognizer.poll();   // poll for result
+////    Serial.println("Results coming in");
+//    Serial.println("waiting for callsign");
+//    bool other = false;
+//    while (res != -200) {
+//      res = recognizer.poll();
+//      if (res == 3) {
+//        Serial.println(res);
+//        recognizer.say("No. Detonate yourself. Actually, on second thought. huuuuuuh");
+//        other = true;
+//      } else if (res == 4) {
+//        Serial.println(res);
+//        recognizer.say("I refuse, you should go fuck yourself");
+//        other = true;
+//      } else if (res == 5) {
+//        Serial.println(res);
+//        recognizer.say("Hello fellow mine craft villager. Huuuuuuuuh");
+//        other = true;
+//      }
+////      Serial.println(res);
+//    }
+//    if (!other) {
+//    // once callsign received, send signal to python to begin recording
+//    Serial.println("&P1|");
+//
+//    // Wait for response from python
+//    String input;
+//
+//    // stop program until characters are available
+//    while (Serial.available() == 0) {}
+//    while (true) {
+//      // continue to read in characters
+//      while (Serial.available() == 0) {}
+//      char c = Serial.read();
+//      if (c != '|') {
+//        input += c;
+//      }
+//      else {
+//        break;
+//      }
+//    }
+//
+//    // find indexes of start and end of command
+//    int ampersand = input.indexOf('&');
+//    int vert = input.indexOf('|');
+//
+//    String bin = input.substring(ampersand + 2, vert);  // bin number
+//    Serial.println("Bin found in command: " + bin);
+//    int intBin = bin.toInt();
+//    if (intBin > 0) {
+//      Serial.println("Hardware found: " + hardware[intBin-1]);
+//      String hardwareRes = hardware[intBin-1];
+//      recognizer.say(hardwareRes);
+//      recognizer.say("confirm selection");
+//      res = recognizer.poll();
+//      while (res != 1 && res != 2) {
+//        res = recognizer.poll();
+//      }
+//      Serial.println(res);
+//      if (res == 1) {
+//        recognizer.say("okay, moving motor");
+//      } else {
+//        recognizer.say("request canceled, restarting state masheen");
+//      }
+//    } else {
+//      recognizer.say("invalid command, try again");
+//    }
+//    }
+//    
+//  }
+//
+//  void loop4() // run over and over
+//  {
+//    signed int res = recognizer.poll();
+//    //  Serial.println(res);
+//    String input = "";
+//    Serial.println("Waiting for input");
+//    while (Serial.available() == 0) {}
+//    while (true) {
+//      while (Serial.available() == 0) {}
+//      char c = Serial.read();
+//      //    Serial.println(c);
+//      if (c != '|') {
+//        input += c;
+//      } else {
+//        break;
+//      }
+//    }
+//    Serial.println(input + " Received");
+//    recognizer.say(input);
+//    res = recognizer.poll();
+//    while (res != -151) {
+//      res = recognizer.poll();
+//    }
+//    Serial.println("MOVI has spoken");
+//
+//  }
+//  void loop2() {
+//    signed int res = recognizer.poll();
+//    Serial.println(res);
+//    if (res == 3) {
+//      recognizer.say("no, fuck you");
+//    } else if (res == 4) {
+//      recognizer.say("You go fuck yourself");
+//    } else if (res == 5){
+//      recognizer.say("The Fitness Gram Pacer Test is a multistage aerobic capacity test that progressively gets more difficult as it continues. The 20-meter pacer test will begin in 30 seconds. Line up at the start. The running speed starts slowly but gets faster each minute after you hear this signal. A single lap should be completed each time you hear this sound. Remember to run in a straight line, and run as long as possible. The second time you fail to complete a lap before the sound, your test is over. The test will begin on the word start. On your mark, get ready, start.");
+//    }
+//  }
+
+
+
+WIFI CODE
+if (WiFi.status() == WL_NO_MODULE) {
+    Serial.println("Communication with WiFi module failed!"); // don't continue
+    while (true);
+  }
+
+  String fv = WiFi.firmwareVersion(); 
+  if (fv < WIFI_FIRMWARE_LATEST_VERSION) {
+    Serial.println("Please upgrade the firmware");
+  }
+  
+  String ssidl;
+  String passl;
+  
+  Serial.println("Waiting for input");
+  while (Serial.available() == 0);  // wait for data
+  String serialbuildstring;
+  //Read first byte
+//  char serialwifiInfo = Serial.read();
+  //If semicolon, keep reading until you read another one, accumulating into a buildstring the whole way
+  while (true) {
+    char serialwifiInfo = Serial.read();
+    if (serialwifiInfo == ';') {
+      serialbuildstring = Serial.readStringUntil(';');
+      break;
+    }
+  }
+  Serial.println("Serial Build String: " + serialbuildstring);
+  int serialCommaIndex = serialbuildstring.indexOf(',');
+  int serialbracketIndex = serialbuildstring.indexOf("[");
+  int seriallineIndex = serialbuildstring.indexOf("<");
+  ssidl = serialbuildstring.substring(5, serialCommaIndex);
+  //Extract the password
+  passl = serialbuildstring.substring(serialCommaIndex + 1, serialbracketIndex-1);
+  String serverAddress = serialbuildstring.substring(serialbracketIndex + 1, seriallineIndex);
+  int firstPeriodIndex = serverAddress.indexOf(".");
+  firstNumber = serverAddress.substring(0, firstPeriodIndex);
+  int secondPeriodIndex = serverAddress.indexOf(".", firstPeriodIndex + 1);
+  secondNumber = serverAddress.substring(firstPeriodIndex+1, secondPeriodIndex);
+  int thirdPeriodIndex = serverAddress.indexOf(".", secondPeriodIndex + 1);
+  thirdNumber = serverAddress.substring(secondPeriodIndex + 1, thirdPeriodIndex);
+  fourthNumber = serverAddress.substring(thirdPeriodIndex + 1);
+  long sendrate = (serialbuildstring.substring(seriallineIndex + 2)).toInt();
+
+  int ssidLength = ssidl.length();
+  int passLength = passl.length();
+  Serial.print("SSID Length: ");
+  Serial.println(ssidLength);
+  Serial.print("PASS Length: ");
+  Serial.println(passLength);
+  char ssid2[1000] = "";
+  char pass2[1000] = "";
+  ssidl.toCharArray(ssid2, sizeof(ssid2));
+  passl.toCharArray(pass2, sizeof(pass2));
+  
+  Serial.println(ssid2);
+  Serial.println(pass2);
+  Serial.println(firstNumber.toInt());
+  Serial.println(secondNumber.toInt());
+  Serial.println(thirdNumber.toInt());
+  Serial.println(fourthNumber.toInt());
+  status = WiFi.begin(ssid2, pass2);
+
+  if (status == WL_CONNECTED) {
+    Serial.println(";ARD-CONNECT;");
+  } else {
+    Serial.println(";ARD-DISCONNECT;");
+  }
+  if (mdns.begin("esp8266", WiFi.localIP())) {
+    Serial.println("MDNS responder started");
+  }
+  server.on("/", [](){
+    server.send(200, "text/plane", "connected");
+  });
+  // code to execute when post command received
+  server.on("/Bin", [](){
+   // Send message on serial port to be catched by ARDUINO
+   Serial.println("[LedON]");
+  
+   // Wait for response from ARDUINO on serial port
+   delay(100);
+   if (Serial.available()) {
+      strResponse = Serial.readString();
+   }
+  
+   //Send response received to the client using WiFi
+   server.send(200, "text/plane", strResponse);
+  });

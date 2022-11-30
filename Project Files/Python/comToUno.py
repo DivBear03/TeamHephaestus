@@ -20,7 +20,7 @@ if (port == "COM255"):
     print("No serial port found")
     quit()
 
-hardware = {
+hardware = {  
     "M5 bolt":1, "M5 nut":2,
     "M6 bolt":3, "M6 nut":4,
     "M8 bolt":5, "M8 nut":6,
@@ -77,7 +77,7 @@ def Record():
     # record audio through microphone
     print("Recording")
     with mic as source:
-        # r.adjust_for_ambient_noise(source)
+        r.adjust_for_ambient_noise(source)
         print("listening now")
         audio = r.listen(source)
     print("analyzing")
