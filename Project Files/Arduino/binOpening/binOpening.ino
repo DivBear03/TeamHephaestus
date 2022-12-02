@@ -2,7 +2,7 @@
 
 const int arraySize = 4;
 String bins[arraySize] = {"Wrenches", "Nuts", "Bolts", "Screws"};
-Servo servoArray[arraySize];
+Servo servoArray[arraySize];  
 
 void setup() {
 

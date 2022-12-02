@@ -198,3 +198,83 @@ if (WiFi.status() == WL_NO_MODULE) {
    //Send response received to the client using WiFi
    server.send(200, "text/plane", strResponse);
   });
+
+
+
+
+
+
+//void loop1() {
+//    signed int res = recognizer.poll();   // poll for result
+//    Serial.println("waiting for callsign");
+//    bool other = false; // indicator of other command or legitimate command
+//    
+//    while (res != -200) {
+//      res = recognizer.poll();
+//      if (res == 3) {
+//        Serial.println(res);
+//        recognizer.say("No. Detonate yourself. Actually, on second thought. huuuuuuh");
+//        other = true;
+//        break;
+//      } else if (res == 4) {
+//        Serial.println(res);
+//        recognizer.say("Nah bro. you should go fuck yourself");
+//        other = true;
+//        break;
+//      } else if (res == 5) {
+//        Serial.println(res);
+//        recognizer.say("Hello fellow mine craft villager. Huuuuuuuuh");
+//        other = true;
+//        break;
+//      }
+//    }
+//
+//    // if a legitimate command
+//    if (!other) {
+//      // once callsign received, send signal to python to begin recording
+//      Serial.println("&P1|");
+//  
+//      // Wait for response from python
+//      String input;
+//  
+//      // stop program until characters are available
+//      while (Serial.available() == 0) {}
+//      while (true) {
+//        // continue to read in characters
+//        while (Serial.available() == 0) {}
+//        char c = Serial.read();
+//        if (c != '|') {
+//          input += c;
+//        }
+//        else {
+//          break;
+//        }
+//      }
+//  
+//      // find indexes of start and end of command
+//      int ampersand = input.indexOf('&');
+//      int vert = input.indexOf('|');
+//  
+//      String bin = input.substring(ampersand + 2, vert);  // bin number
+//      Serial.println("Bin found in command: " + bin);
+//      int intBin = bin.toInt();
+//      if (intBin > 0) {
+//        Serial.println("Hardware found: " + hardware[intBin-1]);
+//        String hardwareRes = hardware[intBin-1];
+//        recognizer.say(hardwareRes);
+//        recognizer.say("confirm selection");
+//        res = recognizer.poll();
+//        while (res != 1 && res != 2) {
+//          res = recognizer.poll();
+//        }
+//        Serial.println(res);
+//        if (res == 1) {
+//          recognizer.say("okay, moving motor");
+//        } else {
+//          recognizer.say("request canceled, restarting state masheen");
+//        }
+//      } else {
+//        recognizer.say("invalid command, try again");
+//      }
+//    }
+//  }
